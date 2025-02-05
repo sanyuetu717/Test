@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>注册 - 咖啡的世界</title>
+    <style>
+        :root {
+            --primary-color: #8b4513;
+            --secondary-color: #4a2c2a;
+            --accent-color: #d4a574;
+            --bg-light: rgba(255, 248, 243, 0.9);
+        }
+
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                        url('https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .register-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .register-header h1 {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .register-header img {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 5px rgba(139, 69, 19, 0.2);
+        }
+
+        .register-button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .register-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+        }
+
+        .error-message {
+            color: #ff4d4d;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            background: rgba(75, 181, 67, 0.9);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .loading {
+            position: relative;
+            pointer-events: none;
+        }
+
+        .loading:after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: rotate 1s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: translateY(-50%) rotate(0deg); }
+            to { transform: translateY(-50%) rotate(360deg); }
+        }
+
+        .additional-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .additional-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .additional-links a:hover {
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=80&h=80&fit=crop" alt="咖啡logo">
+            <h1>创建账号</h1>
+        </div>
+
+        <div class="success-message" id="successMessage">注册成功！正在跳转到登录页面...</div>
+
+        <form id="registerForm" novalidate>
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" id="username" name="username" placeholder="请输入用户名" required>
+                <div class="error-message" id="usernameError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">邮箱</label>
+                <input type="email" id="email" name="email" placeholder="请输入邮箱" required>
+                <div class="error-message" id="emailError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" placeholder="请输入密码" required>
+                <div class="error-message" id="passwordError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">确认密码</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="请再次输入密码" required>
+                <div class="error-message" id="confirmPasswordError"></div>
+            </div>
+
+            <button type="submit" class="register-button" id="registerButton">注册</button>
+        </form>
+
+        <div class="additional-links">
+            <a href="login.html">已有账号？立即登录</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const registerForm = document.getElementById('registerForm');
+            const username = document.getElementById('username');
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirmPassword');
+            const registerButton = document.getElementById('registerButton');
+            const successMessage = document.getElementById('successMessage');
+
+            // 验证规则
+            const validators = {
+                username: (value) => {
+                    if (!value) return '用户名不能为空';
+                    if (value.length < 3) return '用户名长度不能小于3个字符';
+                    if (value.length > 20) return '用户名长度不能超过20个字符';
+                    if (!/^[\u4e00-\u9fa5_a-zA-Z0-9]+$/.test(value)) return '用户名只能包含中文、英文、数字和下划线';
+                    return '';
+                },
+                email: (value) => {
+                    if (!value) return '邮箱不能为空';
+                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return '请输入有效的邮箱地址';
+                    return '';
+                },
+                password: (value) => {
+                    if (!value) return '密码不能为空';
+                    if (value.length < 6) return '密码长度不能小于6个字符';
+                    if (value.length > 20) return '密码长度不能超过20个字符';
+                    if (!/^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/.test(value)) 
+                        return '密码只能包含英文、数字和特殊字符';
+                    return '';
+                },
+                confirmPassword: (value) => {
+                    if (!value) return '请确认密码';
+                    if (value !== password.value) return '两次输入的密码不一致';
+                    return '';
+                }
+            };
+
+            // 实时验证
+            Object.keys(validators).forEach(field => {
+                const input = document.getElementById(field);
+                const error = document.getElementById(`${field}Error`);
+
+                input.addEventListener('input', function() {
+                    const errorMessage = validators[field](this.value);
+                    error.textContent = errorMessage;
+                    error.style.display = errorMessage ? 'block' : 'none';
+                    this.classList.toggle('error', !!errorMessage);
+                });
+            });
+
+            // 处理注册请求
+            async function handleRegister(formData) {
+                try {
+                    const response = await fetch('http://localhost:3000/api/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        // 显示具体的错误信息
+                        throw new Error(data.error || data.details || '注册失败');
+                    }
+
+                    return {
+                        success: true,
+                        data: data
+                    };
+                } catch (error) {
+                    return {
+                        success: false,
+                        error: error.message
+                    };
+                }
+            }
+
+            // 表单提交
+            registerForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                // 清除所有错误提示
+                Object.keys(validators).forEach(field => {
+                    const input = document.getElementById(field);
+                    const error = document.getElementById(`${field}Error`);
+                    error.style.display = 'none';
+                    input.classList.remove('error');
+                });
+
+                // 验证所有字段
+                let hasError = false;
+                Object.keys(validators).forEach(field => {
+                    const input = document.getElementById(field);
+                    const error = document.getElementById(`${field}Error`);
+                    const errorMessage = validators[field](input.value);
+                    if (errorMessage) {
+                        error.textContent = errorMessage;
+                        error.style.display = 'block';
+                        input.classList.add('error');
+                        hasError = true;
+                    }
+                });
+
+                if (hasError) return;
+
+                // 添加加载状态
+                registerButton.classList.add('loading');
+                registerButton.disabled = true;
+
+                // 发送注册请求
+                const formData = {
+                    username: username.value,
+                    email: email.value,
+                    password: password.value
+                };
+
+                const result = await handleRegister(formData);
+
+                if (result.success) {
+                    // 显示成功消息
+                    successMessage.style.display = 'block';
+                    
+                    // 2秒后跳转到登录页面
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    // 显示具体的错误消息
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'error-message';
+                    errorDiv.style.display = 'block';
+                    errorDiv.textContent = result.error || '注册失败，请稍后重试';
+                    registerForm.insertBefore(errorDiv, registerButton);
+                    
+                    // 移除加载状态
+                    registerButton.classList.remove('loading');
+                    registerButton.disabled = false;
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

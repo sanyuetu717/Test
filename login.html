@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>登录 - 咖啡的世界</title>
+    <style>
+        :root {
+            --primary-color: #8b4513;
+            --secondary-color: #4a2c2a;
+            --accent-color: #d4a574;
+            --bg-light: rgba(255, 248, 243, 0.9);
+        }
+
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                        url('https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .login-header img {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 5px rgba(139, 69, 19, 0.2);
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+        }
+
+        .additional-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .additional-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .additional-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .divider {
+            margin: 20px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background: #ddd;
+        }
+
+        .divider::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background: #ddd;
+        }
+
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-login button {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-login button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .social-login i {
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 20px;
+                padding: 30px;
+            }
+        }
+
+        /* 添加错误提示样式 */
+        .error-message {
+            color: #ff4d4d;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-group input.error {
+            border-color: #ff4d4d;
+        }
+
+        /* 添加成功提示样式 */
+        .success-message {
+            background: rgba(75, 181, 67, 0.9);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        /* 添加加载动画样式 */
+        .loading {
+            position: relative;
+            pointer-events: none;
+        }
+
+        .loading:after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: rotate 1s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: translateY(-50%) rotate(0deg); }
+            to { transform: translateY(-50%) rotate(360deg); }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=80&h=80&fit=crop" alt="咖啡logo">
+            <h1>欢迎回来</h1>
+        </div>
+        
+        <div class="success-message" id="successMessage">登录成功！正在跳转...</div>
+        
+        <form id="loginForm" novalidate>
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" id="username" name="username" placeholder="请输入用户名" required>
+                <div class="error-message" id="usernameError"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" placeholder="请输入密码" required>
+                <div class="error-message" id="passwordError"></div>
+            </div>
+            
+            <button type="submit" class="login-button" id="loginButton">登录</button>
+        </form>
+        
+        <div class="additional-links">
+            <a href="#">忘记密码？</a>
+            <a href="register.html">注册账号</a>
+        </div>
+        
+        <div class="divider">或</div>
+        
+        <div class="social-login">
+            <button type="button" title="微信登录">
+                <i class="fab fa-weixin"></i>
+            </button>
+            <button type="button" title="QQ登录">
+                <i class="fab fa-qq"></i>
+            </button>
+            <button type="button" title="微博登录">
+                <i class="fab fa-weibo"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            const username = document.getElementById('username');
+            const password = document.getElementById('password');
+            const usernameError = document.getElementById('usernameError');
+            const passwordError = document.getElementById('passwordError');
+            const loginButton = document.getElementById('loginButton');
+            const successMessage = document.getElementById('successMessage');
+
+            // 用户名验证规则
+            function validateUsername(value) {
+                if (!value) {
+                    return '用户名不能为空';
+                }
+                if (value.length < 3) {
+                    return '用户名长度不能小于3个字符';
+                }
+                if (value.length > 20) {
+                    return '用户名长度不能超过20个字符';
+                }
+                if (!/^[\u4e00-\u9fa5_a-zA-Z0-9]+$/.test(value)) {
+                    return '用户名只能包含中文、英文、数字和下划线';
+                }
+                return '';
+            }
+
+            // 密码验证规则
+            function validatePassword(value) {
+                if (!value) {
+                    return '密码不能为空';
+                }
+                if (value.length < 6) {
+                    return '密码长度不能小于6个字符';
+                }
+                if (value.length > 20) {
+                    return '密码长度不能超过20个字符';
+                }
+                if (!/^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/.test(value)) {
+                    return '密码只能包含英文、数字和特殊字符';
+                }
+                return '';
+            }
+
+            // 实时验证用户名和密码
+            username.addEventListener('input', function() {
+                const error = validateUsername(this.value);
+                usernameError.textContent = error;
+                usernameError.style.display = error ? 'block' : 'none';
+                this.classList.toggle('error', !!error);
+            });
+
+            password.addEventListener('input', function() {
+                const error = validatePassword(this.value);
+                passwordError.textContent = error;
+                passwordError.style.display = error ? 'block' : 'none';
+                this.classList.toggle('error', !!error);
+            });
+
+            // 处理登录请求
+            async function handleLogin(username, password) {
+                try {
+                    const response = await fetch('http://localhost:3000/api/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ username, password })
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(data.error || '登录失败');
+                    }
+
+                    // 保存令牌和会话ID到本地存储
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('sessionId', data.sessionId);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+
+                    return true;
+                } catch (error) {
+                    console.error('登录错误:', error);
+                    return false;
+                }
+            }
+
+            // 添加登出函数
+            async function logout() {
+                try {
+                    const sessionId = localStorage.getItem('sessionId');
+                    await fetch('http://localhost:3000/api/logout', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-session-id': sessionId
+                        }
+                    });
+
+                    // 清除本地存储
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('sessionId');
+                    localStorage.removeItem('user');
+
+                    window.location.href = 'login.html';
+                } catch (error) {
+                    console.error('登出错误:', error);
+                }
+            }
+
+            // 表单提交验证
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                // 清除之前的错误提示
+                usernameError.style.display = 'none';
+                passwordError.style.display = 'none';
+                username.classList.remove('error');
+                password.classList.remove('error');
+
+                // 前端验证
+                const usernameErrorMsg = validateUsername(username.value);
+                const passwordErrorMsg = validatePassword(password.value);
+
+                if (usernameErrorMsg || passwordErrorMsg) {
+                    if (usernameErrorMsg) {
+                        username.classList.add('error');
+                        usernameError.textContent = usernameErrorMsg;
+                        usernameError.style.display = 'block';
+                    }
+                    if (passwordErrorMsg) {
+                        password.classList.add('error');
+                        passwordError.textContent = passwordErrorMsg;
+                        passwordError.style.display = 'block';
+                    }
+                    return;
+                }
+
+                // 添加加载状态
+                loginButton.classList.add('loading');
+                loginButton.disabled = true;
+
+                // 发送登录请求
+                const loginSuccess = await handleLogin(username.value, password.value);
+
+                if (loginSuccess) {
+                    // 显示成功消息
+                    successMessage.style.display = 'block';
+                    
+                    // 2秒后跳转到主页
+                    setTimeout(() => {
+                        window.location.href = 'hellow.html';
+                    }, 2000);
+                } else {
+                    // 显示错误消息
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'error-message';
+                    errorDiv.style.display = 'block';
+                    errorDiv.textContent = '用户名或密码错误';
+                    loginForm.insertBefore(errorDiv, loginButton);
+                    
+                    // 移除加载状态
+                    loginButton.classList.remove('loading');
+                    loginButton.disabled = false;
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

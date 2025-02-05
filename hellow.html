@@ -544,6 +544,26 @@
             background: var(--accent-color);
             color: white;
         }
+
+        .login-link {
+            background: var(--primary-color);
+            color: white !important;
+            border-radius: 20px;
+            padding: 8px 20px !important;
+            margin-left: 20px;
+        }
+        
+        .login-link:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        @media screen and (max-width: 768px) {
+            .login-link {
+                margin: 10px auto;
+                display: inline-block;
+            }
+        }
     </style>
 </head>
 <body>
@@ -581,6 +601,9 @@
                         <li><a href="#contact">联系方式</a></li>
                         <li><a href="#join-us">加入我们</a></li>
                     </ul>
+                </li>
+                <li style="float: right;">
+                    <a href="login.html" class="login-link">登录</a>
                 </li>
             </ul>
         </nav>

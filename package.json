@@ -1,0 +1,20 @@
+{
+  "name": "coffee-login-system",
+  "version": "1.0.0",
+  "description": "Coffee website login system",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^8.5.1",
+    "cors": "^2.8.5",
+    "body-parser": "^1.19.0",
+    "mongoose": "^6.0.0",
+    "dotenv": "^10.0.0",
+    "validator": "^13.6.0",
+    "redis": "^4.0.0",
+    "express-session": "^1.17.2",
+    "connect-redis": "^6.0.0",
+    "uuid": "^8.3.2"
+  }
+} 
